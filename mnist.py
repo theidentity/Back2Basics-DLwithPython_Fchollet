@@ -26,7 +26,7 @@ class MNIST_Classifier(object):
         self.steps_per_epoch = self.train_samples // self.batch_size + 1
         self.validation_steps = self.test_samples // self.batch_size + 1
 
-        self.name = ''.join(['mnist', '_basic'])
+        self.name = ''.join(['mnist', '_norm'])
         self.best_model_path = ''.join(
             ['models/', self.name, '_best', '.hdf5'])
         self.last_model_path = ''.join(
@@ -35,11 +35,11 @@ class MNIST_Classifier(object):
         self.graph_path = ''.join(['logs/', self.name, '_graph', '.png'])
 
         self.normalize_data = True
-        self.add_dropout = True
-        self.nodes_per_layer = [8, 8, 8]
+        self.add_dropout = False
+        self.nodes_per_layer = [64, 64, 64]
 
     def get_data(self):
-        (x_train, y_train), (x_test, y_test) = mnist.load_data()
+        (X_train, y_train), (X_test, y_test) = mnist.load_data()
 
         if self.normalize_data:
             mean = np.mean(X_train)
