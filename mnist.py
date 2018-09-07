@@ -36,7 +36,7 @@ class MNIST_Classifier(object):
 
         self.normalize_data = True
         self.add_dropout = False
-        self.nodes_per_layer = [64, 64, 64]
+        self.nodes_per_layer = [16, 16, 16]
 
     def get_data(self):
         (X_train, y_train), (X_test, y_test) = mnist.load_data()
@@ -59,8 +59,6 @@ class MNIST_Classifier(object):
         return X_train, X_test, y_train, y_test
 
     def get_model(self, dropout=False):
-
-        input_nodes = [8, 8, 8]
 
         input_img = Input(shape=(self.img_rows * self.img_cols,))
         x = input_img

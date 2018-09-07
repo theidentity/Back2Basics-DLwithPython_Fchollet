@@ -10,7 +10,7 @@ def remove(path):
         print('does not exist ', path)
 
 
-def get_clf_report(y_true, y_pred):
+def get_clf_report(y_true, y_pred, y_pred_prob=None):
 
     from sklearn.metrics import confusion_matrix, classification_report
     from sklearn.metrics import accuracy_score, precision_score, recall_score
@@ -45,11 +45,11 @@ def plot_model_history(log_path, save_path, addn_info=''):
     title += str(addn_info)
 
     df = pd.read_csv(log_path)
-    y = df['categorical_accuracy']
+    y = df['acc']
     x = range(len(y))
     plt.plot(x, y, '-b', label='train_acc')
 
-    y = df['val_categorical_accuracy']
+    y = df['val_acc']
     x = range(len(y))
     plt.plot(x, y, '-r', label='valid_acc')
 
@@ -67,3 +67,11 @@ def plot_model_history(log_path, save_path, addn_info=''):
 
     plt.savefig(save_path)
     plt.show()
+
+
+def normalize(arr, low=0, high=255):
+    diff = high - low
+    if diff > 0:
+        arr = (arr - np.min(arr)) / (np.max(arr) - np.min(arr))
+        arr = arr * diff
+    return arr
