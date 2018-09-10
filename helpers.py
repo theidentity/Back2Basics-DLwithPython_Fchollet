@@ -1,5 +1,13 @@
+import shutil
 import os
 import numpy as np
+import cv2
+
+
+def clear_folder(path):
+    if os.path.exists(path):
+        shutil.rmtree(path)
+    os.makedirs(path)
 
 
 def remove(path):
@@ -38,6 +46,8 @@ def get_clf_report(y_true, y_pred, y_pred_prob=None):
 
 def plot_model_history(log_path, save_path, addn_info=''):
 
+    import matplotlib
+    matplotlib.use('Agg')
     import pylab as plt
     import pandas as pd
 
@@ -66,7 +76,6 @@ def plot_model_history(log_path, save_path, addn_info=''):
     plt.ylim(-1.5, 2.0)
 
     plt.savefig(save_path)
-    plt.show()
 
 
 def normalize(arr, low=0, high=255):
@@ -75,3 +84,89 @@ def normalize(arr, low=0, high=255):
         arr = (arr - np.min(arr)) / (np.max(arr) - np.min(arr))
         arr = arr * diff
     return arr
+
+
+def create_folder(path):
+    if os.path.exists(path):
+        return
+    os.makedirs(path)
+
+
+def move_folder(src, dst):
+    if os.path.exists(dst):
+        shutil.rmtree(dst)
+    shutil.copytree(src, dst)
+    shutil.rmtree(src)
+
+
+def get_count(path):
+    for root, dirs, files in os.walk(path):
+        print(root)
+        count = sum([len(f) for r, d, f in os.walk(root)])
+        print(root, ':', count)
+
+
+def know_shape(path):
+    arr = np.load(path)
+    print(arr.shape)
+    print(arr.dtype)
+
+
+def check_file_paths(file_lists):
+
+    valid_files = [x for x in file_lists if os.path.exists(x)]
+    invalid_files = [x for x in file_lists if not os.path.exists(x)]
+    print('VALID : ', len(valid_files))
+    print('INVALID : ', len(invalid_files))
+    return valid_files, invalid_files
+
+
+def check_list_diff(a, b):
+
+    if len(a) > len(b):
+        large = set(a)
+        small = set(b)
+    else:
+        large = set(b)
+        small = set(a)
+
+    common = large.intersection(small)
+    print(str(len(common)) + ' are common')
+
+    not_present = large.difference(small)
+    print(str(len(not_present)) + ' are diff')
+
+    return common, not_present
+
+
+def write_imgs_serially(imgs, base_path='tmp/tmp_imgs/'):
+
+    clear_folder(base_path)
+
+    for i, img in enumerate(imgs):
+        name = base_path + str(i).zfill(5) + '.jpg'
+        status = cv2.imwrite(name, img)
+        print(name, status)
+
+
+def split_train_test(X, y=None, test_size=0.20, seed=42):
+    from sklearn.model_selection import train_test_split
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=test_size, random_state=seed)
+    return (X_train, y_train), (X_test, y_test)
+
+
+def check_array_prop(arr):
+
+    print(type(arr))
+    print(arr.shape)
+    print(arr.dtype)
+
+    print('MAX : ', np.max(arr))
+    print('MIN : ', np.min(arr))
+    print('MEAN : ', np.mean(arr))
+    print('STD : ', np.std(arr))
+
+if __name__ == '__main__':
+    get_count('data/')
+ 

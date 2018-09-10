@@ -16,8 +16,8 @@ from helpers import remove
 from helpers import normalize
 
 
-class IMDB_Classifier(object):
-    """docstring for IMDB_Classifier"""
+class Reuters_News_Clf(object):
+    """docstring for Reuters_News_Clf"""
 
     def __init__(self):
         self.max_features = 10000
@@ -176,7 +176,7 @@ class IMDB_Classifier(object):
 
 if __name__ == '__main__':
 
-    clf = IMDB_Classifier()
+    clf = Reuters_News_Clf()
     # clf.get_data()
     clf.train(lr=1e-3, epochs=100)
     clf.continue_train(lr=1e-4, epochs=100, resume_model='last')
